@@ -100,14 +100,35 @@ void * popBack(List * list) {
   return popCurrent(list);
 }
 
-void * popCurrent(List * list) {
-  if (list->current)
-  {
-    Node * aux = list->current;
-    aux->prev->next = aux->next;
-    aux->next->prev = aux->prev;
-  }
-  return NULL;
+void *popCurrent(List *list) {
+    if (list == NULL || list->current == NULL) {
+        return NULL;
+    }
+
+    Node *current = list->current;
+
+    if (current == list->head && current == list->tail) {
+        list->head = list->tail = NULL;
+    }
+
+    else if (current == list->head) {
+        list->head = current->next;
+        list->head->prev = NULL;
+    }
+
+    else if (current == list->tail) {
+        list->tail = current->prev;
+        list->tail->next = NULL;
+    }
+    // Si el nodo actual está en medio de la lista
+    else {
+        current->prev->next = current->next;
+        current->next->prev = current->prev;
+    }
+
+    void *data = current->data;
+    free(current);
+    return data;
 }
 
 void cleanList(List * list) {
