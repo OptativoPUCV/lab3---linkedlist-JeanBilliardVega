@@ -73,32 +73,13 @@ void pushBack(List * list, void * data) {
 }
 
 void pushCurrent(List * list, void * data) {
-  if (list->current == list->tail)
-  {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    if (newNode) {
-        newNode->data = data;
-        newNode->next = NULL;
-        if (!list->head) {
-            list->head = list->tail = newNode;
-        } else {
-            list->tail->next = newNode;
-            list->tail = newNode;
-        }
-    }
-  }
-  else
-  {
-    Node* newNode = (Node*)malloc(sizeof(Node));
-    if (newNode) {
-        newNode->data = data;
-        newNode->next = list->head;
-        list->head = newNode;
-        if (!list->tail) {
-            list->tail = newNode;
-        }
-    }
-  }
+  Node * new = createNode(data);
+  new->prev = list->current;
+  new->next = list->current->next;
+  new->prev = list->current->next;
+  new->prev->next = new;
+  if(new->next == NULL) list->tail = new;
+  else new->next->prev = new;
   
 }
 
